@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %}
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      {% block styles %}
+        {{ bootstrap.load_css() }}
+        <style type="text/css">
+          .hidden { display: none; }
+        </style>
+      {% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+    {% endblock %}
+  </head>
+  <body>
+  {% block navbar %}
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand mb-0 h1" href="#">Duckstore</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="navi-tem active">
+              <a class="nav-link" href="{{ url_for('.store_main') }}">Search</a>
+            </li>
+            <li class="navi-tem active">
+              <a class="nav-link" href="{{ url_for('.edit_document') }}">Add Document</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  {% endblock %}
+  <div class="container">
+  {% block content %}
+
+  {% endblock %}
+  </div>
+  {% block scripts %}
+    {{ bootstrap.load_js() }}
+    {% block select2 %} {# Select2 is what makes all the dropdowns nice #}
+      <link href="{{ url_for('static', filename='select2/css/select2.min.css') }}" rel="stylesheet" />
+      <link href="{{ url_for('static', filename='select2/css/select2-bootstrap4.min.css') }}" rel="stylesheet"/>
+      <script src="{{ url_for('static', filename='select2/js/select2.min.js') }}"></script>
+    {% endblock %}
+    {% block page_scripts %}
+    {% endblock %}
+  {% endblock %}
+  </body>
+</html>

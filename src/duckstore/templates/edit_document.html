@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% from 'bootstrap/form.html' import render_form %}
+{% from 'bootstrap/utils.html' import render_messages %}
+{% block title %}Duckstore Document Storage{% endblock %}
+{% block content %}
+  <div class="row pt-4">
+    <div class="col-lg">
+      <h1>Add Document</h1>
+    </div>
+  </div>
+  <div class="row py-3">
+    <div class="col-lg d-flex justify-content-start">
+      <a href="{{ url_for('.edit_document') }}" role="button" class="btn btn-primary">New</a>
+    </div>
+    {% if doc_id %}
+      <div class="col-lg d-flex justify-content-end">
+        <a href="{{ url_for('.delete_document', doc_id=doc_id) }}" role="button" class="btn btn-danger">
+          Delete
+        </a>
+      </div>
+    {% endif %}
+  </div>
+  {{ render_messages(dismissible=True) }}
+  <div class="row">
+    <div class="col-lg">
+    {% block add_form %}
+      {{ render_form(docform, id="docform") }}
+    {% endblock %}
+    </div>
+  </div>
+  <div id="filelist_parent" class="hidden">
+    <div class="row pt-4">
+      <div class="col-lg">
+        <h2>Existing Files</h2>
+      </div>
+    </div>
+    <div id="filelist">
+    </div>
+  </div>
+{% endblock %}
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='duckstore/edit_document.js') }}"></script>
+  {% if doc_id %}
+    <script type="text/javascript">
+    $(document).ready(function () {
+      getDoc({{ doc_id }});
+    })
+    </script>
+  {% else %}
+    <script type="text/javascript">
+    $(document).ready(function () {
+      clearForm()
+    })
+    </script>
+  {% endif %}
+{% endblock %}

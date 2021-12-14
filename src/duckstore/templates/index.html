@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% from 'bootstrap/form.html' import render_form %}
+{% from 'bootstrap/table.html' import render_table %}
+{% from 'bootstrap/utils.html' import render_messages %}
+{% block title %}Duckstore Document Storage{% endblock %}
+{% block content %}
+  {{ render_messages(dismissible=True) }}
+  <div class="row py-3">
+    <div class="col">
+      <h1>Search</h1>
+    </div>
+  </div>
+  <div class="row py-3">
+    <div class="col">
+    {% block searchform %}
+      {{ render_form(searchform) }}
+    {% endblock %}
+    </div>
+  </div>
+  {% if results %}
+    <div class="row py-3">
+      <div class="col">
+        <h2>Results</h2>
+      </div>
+    </div>
+    <div class="row py-3">
+      <div class="col">
+        <table class="table table-hover table-sm table-striped">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Title</th>
+              <th scope="col">Location</th>
+              <th scope="col">Date Received</th>
+              <th scope="col">Sources</th>
+              <th scope="col">Tags</th>
+              <th scope="col">Files</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for document in results %}
+              <tr>
+              <th scope="row">{{ document.id }}</th>
+              <td>
+                <a href="{{ url_for('.edit_document', doc_id=document.id) }}">
+                  {{ document.title }}
+                </a>
+              </td>
+              <td>{{ document.location }}</td>
+              <td>{{ document.date_received.strftime('%Y-%m-%d') }}</td>
+              <td>
+                {% for source in document.sources %}
+                  <p>{{ source.name }}</p>
+                {% endfor %}
+              </td>
+              <td>
+                {% for tag in document.tags %}
+                  <p>{{ tag.name }}</p>
+                {% endfor %}
+              </td>
+              <td>
+                {% for file in document.files %}
+                  <p>
+                    <a href="{{ url_for('.download_file', file_id=file.id) }}">
+                      {{ file.original_name }}
+                    </a>
+                  </p>
+                {% endfor %}
+              </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='duckstore/index.js') }}"></script>
+{% endblock %}

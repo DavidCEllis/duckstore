@@ -1,0 +1,2 @@
+include src/duckstore/templates/*
+include src/duckstore/static/*

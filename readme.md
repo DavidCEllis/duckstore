@@ -14,16 +14,16 @@ Inspired by: https://github.com/alexwlchan/docstore
 
 ## Dependencies ##
 
-alembic - Managing changes to database structure / not currently used
-bootstrap-flask - Making the page look barely acceptable
-click - CLI for app runner
-flask - web framework
-flask-pretty - Make the HTML from flask readable
-flask-wtf & wtforms - Web forms
-py7zr - 7zip compression
-select2 - Make the select fields actually usable
-sqlalchemy - SQL Toolkit/Database ORM
+* alembic - Managing changes to database structure / not currently used
+* bootstrap-flask - Making the page look barely acceptable
+* click - CLI for app runner
+* flask - web framework
+* flask-pretty - Make the HTML from flask readable
+* flask-wtf & wtforms - Web forms
+* py7zr - 7zip compression
+* select2 - Make the select fields actually usable
+* sqlalchemy - SQL Toolkit/Database ORM
 
-Select2 - Better select dialogs
+* Select2 - Better select dialogs
 
 Ghostscript is used via subprocess in order to reduce the size of PDFs

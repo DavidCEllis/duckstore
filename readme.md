@@ -23,7 +23,6 @@ Inspired by: https://github.com/alexwlchan/docstore
 * py7zr - 7zip compression
 * select2 - Make the select fields actually usable
 * sqlalchemy - SQL Toolkit/Database ORM
-
-* Select2 - Better select dialogs
+* Select2 (JS) - Better select dialogs
 
 Ghostscript is used via subprocess in order to reduce the size of PDFs

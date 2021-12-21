@@ -80,8 +80,6 @@ $(document).ready(function () {
     }
   })
 
-  $('#tags').append(new Option("TEST", "TEST"))
-
   $('#date_added').prop('disabled', true)  // Lazy disabling of date added manually
   $('#files').prop('class', 'form-control-file')
   $('html').removeClass('hidden')

@@ -7,6 +7,7 @@ from wtforms import (
     SelectField,
     SubmitField,
     BooleanField,
+    TextAreaField,
 )
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired
@@ -32,6 +33,7 @@ class DocumentForm(FlaskForm):
     date_added = DateField("Date Added")
 
     title = StringField("Title", validators=[DataRequired()])
+    description = TextAreaField("Description")
     date_received = DateField("Date Received", validators=[DataRequired()])
     location = StringField("Physical Copy Location")
     tags = MultipleTagField("Tags")

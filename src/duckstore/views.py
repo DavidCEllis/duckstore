@@ -101,13 +101,15 @@ def edit_document():
         document.date_received = docform.date_received.data
         document.location = docform.location.data
 
+        document.description = docform.description.data
+
         # TODO: rewrite so there's only 1 query for tags and 1 for sources
         #  rather than 1 per tag/source
         document.tags = []
         for tagname in docform.tags.data:
             tagname = tagname.strip()
             # Ignore empty tags
-            if tagname.strip() == "":
+            if tagname == "":
                 continue
             query = select(Tag).where(Tag.name == tagname)
             tag = db_session.execute(query).scalars().one_or_none()

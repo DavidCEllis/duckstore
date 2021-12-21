@@ -10,6 +10,7 @@ function fillForm(data) {
   $('#date_added').val(data['date_added'])
   $('#ID').val(data['id'])
   $('#title').val(data['title'])
+  $('#description').val(data['description'])
   $('#date_received').val(data['date_received'])
   $('#location').val(data['location'])
 

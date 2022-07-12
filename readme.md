@@ -4,6 +4,15 @@ Document store to manage important documents
 
 Inspired by: https://github.com/alexwlchan/docstore
 
+## How do I launch this again? ##
+Install via pip for development 
+`pip install -e .`
+Run `duckstore` in the terminal.
+This will run on the flask test server and that's enough for the purpose of this project.
+This is not intended to be run across the internet, just on a local network.
+
+Make sure ghostscript is installed for the PDF compression.
+
 ## Why remake this ##
 
 * Needed to brush up on/relearn python/flask
@@ -21,7 +30,6 @@ Inspired by: https://github.com/alexwlchan/docstore
 * flask-pretty - Make the HTML from flask readable
 * flask-wtf & wtforms - Web forms
 * py7zr - 7zip compression
-* select2 - Make the select fields actually usable
 * sqlalchemy - SQL Toolkit/Database ORM
 * Select2 (JS) - Better select dialogs
 

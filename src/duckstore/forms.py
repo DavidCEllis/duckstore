@@ -8,8 +8,8 @@ from wtforms import (
     SubmitField,
     BooleanField,
     TextAreaField,
+    DateField,
 )
-from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired
 
 

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from flask import Flask
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap4
 from flask_pretty import Prettify
 
 from .config import make_config, db_name
@@ -35,7 +35,7 @@ def create_app(folder_path=".", create=False):
 
     bind_session(db_path)
 
-    Bootstrap(app)
+    Bootstrap4(app)
     Prettify(app)
 
     from . import views

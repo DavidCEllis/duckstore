@@ -44,7 +44,8 @@ def store_main():
     source_select = select(Source).order_by(Source.name)
     sources = [("", "")]
     sources.extend(
-        (item.Source.name, item.Source.name) for item in db_session.execute(source_select)
+        (item.Source.name, item.Source.name)
+        for item in db_session.execute(source_select)
     )
     searchform.source.choices = sources
 
@@ -63,7 +64,9 @@ def store_main():
             query = query.join(Document.sources).where(Source.name == source)
         if tags:
             for tag in tags:
-                subquery = select(Document.id).join(Document.tags).where(Tag.name == tag)
+                subquery = (
+                    select(Document.id).join(Document.tags).where(Tag.name == tag)
+                )
                 query = query.where(Document.id.in_(subquery))
 
         query = query.distinct().order_by(Document.date_received.desc())
@@ -79,7 +82,8 @@ def edit_document():
     docform = DocumentForm()
     source_select = select(Source).order_by(Source.name)
     sources = [
-        (item.Source.name, item.Source.name) for item in db_session.execute(source_select)
+        (item.Source.name, item.Source.name)
+        for item in db_session.execute(source_select)
     ]
     docform.sources.choices = sources
 
@@ -133,13 +137,15 @@ def edit_document():
 
         # Prepare the files here, but don't save them until the commit
         save_files = []
-        folder = Path(current_app.config['STORE_PATH'], current_app.config['STORE_NAME'])
+        folder = Path(
+            current_app.config["STORE_PATH"], current_app.config["STORE_NAME"]
+        )
 
         # Check for 'files' which seems to actually always exist (why if no files are chosen!?)
         # Also check the first file has a filename
         # Flask seems to just get an empty file if no files are chosen
-        if 'files' in request.files and request.files['files'].filename:
-            for file in request.files.getlist('files'):
+        if "files" in request.files and request.files["files"].filename:
+            for file in request.files.getlist("files"):
                 safe_name = secure_filename(file.filename)
                 outpath = prepare_storepath(folder / safe_name)
 
@@ -153,7 +159,7 @@ def edit_document():
         try:
             db_session.commit()
         except IntegrityError as exc:
-            flash(f"Document addition failed: {exc}", 'danger')
+            flash(f"Document addition failed: {exc}", "danger")
             db_session.rollback()
         else:
             # Send them to the new document
@@ -161,19 +167,25 @@ def edit_document():
                 success_message = f"Successfully added document: {document.title}"
             else:
                 success_message = f"Successfully edited document: {document.title}"
-            flash(success_message, 'success')
+            flash(success_message, "success")
 
             for file, outpath in save_files:
-                if docform.compress_pdf.data and outpath.suffix == '.pdf':
-                    with TemporaryDirectory(prefix='temp_', dir=folder) as tmpdir:
+                if docform.compress_pdf.data and outpath.suffix == ".pdf":
+                    with TemporaryDirectory(prefix="temp_", dir=folder) as tmpdir:
                         tmp_file = Path(tmpdir) / Path(outpath).name
                         file.save(tmp_file)
                         result = compress_pdf(tmp_file, outpath)
                         if result.returncode == 0:
-                            flash(f"Uploaded & Compressed {file.filename} as {outpath.name}")
+                            flash(
+                                f"Uploaded & Compressed "
+                                f"{file.filename} as {outpath.name}"
+                            )
                         else:
                             shutil.copyfile(tmp_file, outpath)
-                            flash(f"Uploaded, Failed to Compress {file.filename} as {outpath.name}")
+                            flash(
+                                f"Uploaded, Failed to Compress "
+                                f"{file.filename} as {outpath.name}"
+                            )
 
                 else:
                     file.save(outpath)
@@ -190,14 +202,22 @@ def delete_document():
     if not doc_id:
         return redirect(url_for(".store_main"))
 
-    doc = db_session.execute(select(Document).filter_by(id=doc_id)).scalars().one_or_none()
+    doc = (
+        db_session.execute(select(Document).filter_by(id=doc_id))
+        .scalars()
+        .one_or_none()
+    )
     if not doc:
         flash(f"Document with ID {doc_id} not found.")
         return redirect(url_for(".store_main"))
 
     # Delete the document, first clean up the files
-    store_folder = Path(current_app.config['STORE_PATH'], current_app.config['STORE_NAME'])
-    pending_deletion = [(file.original_name, file.full_path(store_folder)) for file in doc.files]
+    store_folder = Path(
+        current_app.config["STORE_PATH"], current_app.config["STORE_NAME"]
+    )
+    pending_deletion = [
+        (file.original_name, file.full_path(store_folder)) for file in doc.files
+    ]
 
     # Remove the document
     db_session.delete(doc)
@@ -209,7 +229,7 @@ def delete_document():
         try:
             fpath.unlink()
         except FileNotFoundError:
-            flash(f"Could not delete: {fname}", 'error')
+            flash(f"Could not delete: {fname}", "error")
         else:
             flash(f"Deleted: {fname}")
 
@@ -230,11 +250,17 @@ def get_data():
 
 @duckstore.route("/download")
 def download_file():
-    file_id = request.args.get('file_id', None)
+    file_id = request.args.get("file_id", None)
     if file_id:
-        file = db_session.execute(select(File).where(File.id == file_id)).scalars().one_or_none()
+        file = (
+            db_session.execute(select(File).where(File.id == file_id))
+            .scalars()
+            .one_or_none()
+        )
         if file:
-            folder = Path(current_app.config['STORE_PATH'], current_app.config['STORE_NAME'])
+            folder = Path(
+                current_app.config["STORE_PATH"], current_app.config["STORE_NAME"]
+            )
             result = send_from_directory(
                 folder,
                 file.path,

@@ -21,8 +21,12 @@ from duckstore.app import create_app
     type=click.Path(resolve_path=True, path_type=Path, dir_okay=True, file_okay=False),
     help="Duckstore folder (or destination for archive source).",
 )
-@click.option("--create", is_flag=True, help="Create a new store at the folder location.")
-@click.option("--shell", is_flag=True, help="Launch into a shell instead of the web server.")
+@click.option(
+    "--create", is_flag=True, help="Create a new store at the folder location."
+)
+@click.option(
+    "--shell", is_flag=True, help="Launch into a shell instead of the web server."
+)
 @click.option("--password", help="Password if the 7z archive is encrypted.")
 def launch(folder, create, source, shell, password):
     if folder:
@@ -44,14 +48,19 @@ def launch(folder, create, source, shell, password):
         db_path = db_path.resolve()
         click.echo(f"Database found at {db_path}. Loading from folder.")
     else:
-        # Otherwise we have the option of creating a new database or loading from an archive.
+        # Otherwise we have the option of creating a new database
+        # or loading from an archive.
         click.echo(f"Database not found at {db_path}.")
         if create:
             click.echo(f"New Database will be created at {db_path}")
         elif source:
             click.echo(f"Extracting store from {source}")
             if not password:
-                password = click.prompt("Password: ", hide_input=True, default="")
+                password = click.prompt(
+                    "Password: ",
+                    hide_input=True,
+                    default="",
+                )
                 if password == "":
                     password = None
             extract_archive(source, folder, password)
@@ -60,7 +69,7 @@ def launch(folder, create, source, shell, password):
             choice = click.prompt(
                 "Create new duckstore or load from archive: ",
                 type=click.Choice(["new", "load"]),
-                default="load"
+                default="load",
             )
             if choice == "new":
                 create = True
@@ -72,7 +81,11 @@ def launch(folder, create, source, shell, password):
                     click.echo("Source not selected, Exiting.")
                     sys.exit(1)
                 click.echo(f"Extracting store from {source}")
-                password = click.prompt("Password: ", hide_input=True, default="")
+                password = click.prompt(
+                    "Password: ",
+                    hide_input=True,
+                    default="",
+                )
                 if password == "":
                     password = None
                 extract_archive(source, folder, password)
@@ -82,14 +95,17 @@ def launch(folder, create, source, shell, password):
         # These imports are done to put things in locals for easier shell usage
         # noinspection PyUnresolvedReferences
         from duckstore.database.models import File, Source, Tag, Document
+
         # noinspection PyUnresolvedReferences
         from duckstore.database import db_session, bind_session
+
         # noinspection PyUnresolvedReferences
         from sqlalchemy import select
 
         if not db_path.is_file():
             if create:
                 from duckstore.database import create_db
+
                 create_db(db_path)
             else:
                 raise FileNotFoundError(f"Database file {db_path} does not exist.")

@@ -9,4 +9,3 @@ class DatabaseNotFoundError(Exception):
 
 class FileTypeError(Exception):
     """Error for attempting to compress the wrong file type"""
-    pass

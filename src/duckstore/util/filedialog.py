@@ -19,10 +19,10 @@ def dialog_handler():
 
 
 @dialog_handler()
-def get_folder_dialog(initialdir='.'):
+def get_folder_dialog(initialdir="."):
     folder = filedialog.askdirectory(
         initialdir=initialdir,
-        title="Select a duckstore archive folder"
+        title="Select a duckstore archive folder",
     )
 
     if folder:
@@ -32,11 +32,11 @@ def get_folder_dialog(initialdir='.'):
 
 
 @dialog_handler()
-def get_archive_dialog(initialdir='.'):
+def get_archive_dialog(initialdir="."):
     archive_file = filedialog.askopenfilename(
         initialdir=initialdir,
         title="Select a duckstore archive file",
-        filetypes=(('7zip archives', '*.7z'), )
+        filetypes=(("7zip archives", "*.7z"),),
     )
 
     if archive_file:

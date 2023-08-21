@@ -1,6 +1,16 @@
 from pathlib import Path
 
-from sqlalchemy import Table, Column, Integer, String, ForeignKey, Date, DateTime, func, select
+from sqlalchemy import (
+    Table,
+    Column,
+    Integer,
+    String,
+    ForeignKey,
+    Date,
+    DateTime,
+    func,
+    select,
+)
 from sqlalchemy.orm import relationship, declarative_base
 
 
@@ -14,6 +24,7 @@ def add_repr(cls):
         output_base = " ".join(item for item in output_values)
         reprstring = f"<{classname} {output_base}>"
         return reprstring
+
     cls._repr = _repr
     return cls
 
@@ -51,7 +62,7 @@ class File(Base):
     __tablename__ = "file"
 
     id = Column(Integer, primary_key=True)
-    document_id = Column(Integer, ForeignKey('document.id'))
+    document_id = Column(Integer, ForeignKey("document.id"))
     path = Column(String)  # Relative to the store folder.
     original_name = Column(String)  # The original filename in case it got changed
 
@@ -118,7 +129,9 @@ class Document(Base):
     date_received = Column(Date)
 
     files = relationship("File", backref="document", cascade="all, delete-orphan")
-    sources = relationship("Source", secondary=associate_document_source, backref="documents")
+    sources = relationship(
+        "Source", secondary=associate_document_source, backref="documents"
+    )
     tags = relationship("Tag", secondary=associate_document_tag, backref="documents")
 
     def __repr__(self):
@@ -129,7 +142,7 @@ class Document(Base):
                 location=self.location,
                 date_added=self.date_added.strftime("%Y-%m-%d"),
                 sources=f"[{', '.join(s.name for s in self.sources)}]",
-                tags=f"[{', '.join(t.name for t in self.tags)}]"
+                tags=f"[{', '.join(t.name for t in self.tags)}]",
             )
         else:
             return self._repr(
@@ -137,7 +150,7 @@ class Document(Base):
                 title=self.title,
                 date_added=self.date_added.strftime("%Y-%m-%d"),
                 sources=f"[{', '.join(s.name for s in self.sources)}]",
-                tags=f"[{', '.join(t.name for t in self.tags)}]"
+                tags=f"[{', '.join(t.name for t in self.tags)}]",
             )
 
     def to_dict(self):
@@ -173,12 +186,16 @@ def merge_tags(main_tag, *tags):
     for tag in tags:
         pass
 
+    raise NotImplementedError("Apparently I never finished this.")
+
 
 # noinspection DuplicatedCode,PyUnresolvedReferences
 def clear_unused(db_session):
     # Clean up unused tags and unused sources
     used_tags = select(associate_document_tag.c.tag_id)
-    unused_tags = db_session.execute(select(Tag).where(~Tag.id.in_(used_tags))).scalars()
+    unused_tags = db_session.execute(
+        select(Tag).where(~Tag.id.in_(used_tags))
+    ).scalars()
     for tag in unused_tags:
         db_session.delete(tag)
 

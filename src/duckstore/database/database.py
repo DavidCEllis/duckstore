@@ -23,9 +23,12 @@ def create_db(db_path, *, replace=False):
     :param replace: Delete a database if it exists
     """
     from .models import Base
+
     db_path = Path(db_path)
 
-    db_path.parent.mkdir(exist_ok=True)  # Make the folder for the DB if it doesn't exist
+    db_path.parent.mkdir(
+        exist_ok=True
+    )  # Make the folder for the DB if it doesn't exist
 
     if replace:
         db_path.unlink(missing_ok=True)

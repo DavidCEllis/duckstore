@@ -37,11 +37,11 @@ def compress_pdf(input_path, output_path, power=2):
     output_path = Path(output_path)
 
     quality = {
-        0: '/default',
-        1: '/prepress',
-        2: '/printer',
-        3: '/ebook',
-        4: '/screen'
+        0: "/default",
+        1: "/prepress",
+        2: "/printer",
+        3: "/ebook",
+        4: "/screen",
     }
 
     # Basic controls
@@ -56,23 +56,25 @@ def compress_pdf(input_path, output_path, power=2):
     gs = get_ghostscript_path()
 
     # Perform the compression
-    result = subprocess.run([
-        gs,
-        '-sDEVICE=pdfwrite',
-        f'-dPDFSETTINGS={quality[power]}',
-        '-dCompatibilityLevel=1.4',
-        '-dNOPAUSE',
-        '-dQUIET',
-        '-dBATCH',
-        f'-sOutputFile={output_path}',
-        input_path
-    ])
+    result = subprocess.run(
+        [
+            gs,
+            "-sDEVICE=pdfwrite",
+            f"-dPDFSETTINGS={quality[power]}",
+            "-dCompatibilityLevel=1.4",
+            "-dNOPAUSE",
+            "-dQUIET",
+            "-dBATCH",
+            f"-sOutputFile={output_path}",
+            input_path,
+        ]
+    )
 
     return result
 
 
 def get_ghostscript_path():
-    gs_names = ['gs', 'gswin32', 'gswin64']
+    gs_names = ["gs", "gswin32", "gswin64"]
     for name in gs_names:
         pth = shutil.which(name)
         if pth:
@@ -87,4 +89,6 @@ def get_ghostscript_path():
                 if gs_file.exists():
                     return str(gs_file)
 
-    raise FileNotFoundError(f'No GhostScript executable was found on path ({"/".join(gs_names)})')
+    raise FileNotFoundError(
+        f'No GhostScript executable was found on path ({"/".join(gs_names)})'
+    )

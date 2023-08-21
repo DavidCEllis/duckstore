@@ -12,7 +12,7 @@ def extract_archive(archive, destination, password=None):
     destination = Path(destination)
     destination.mkdir(exist_ok=True)
 
-    with SevenZipFile(archive, mode='r', password=password) as f:
+    with SevenZipFile(archive, mode="r", password=password) as f:
         f.extractall(destination)
 
 
@@ -22,5 +22,5 @@ def create_archive(source, archive, password=None, overwrite=False):
     if not overwrite and archive.exists():
         raise FileExistsError("Archive file already exists")
 
-    with SevenZipFile(archive, mode='w', password=password) as f:
+    with SevenZipFile(archive, mode="w", password=password) as f:
         f.writeall(source)

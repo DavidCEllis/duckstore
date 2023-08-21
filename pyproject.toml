@@ -48,7 +48,6 @@ package-dir = {"" = "src"}
 version = {attr = "duckstore.__version__"}
 
 [tool.black]
-line-length = 96
 target_version = ['py311']
 include = '\.pyi?$'
 exclude = '''

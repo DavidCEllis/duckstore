@@ -35,6 +35,7 @@ def create_db(db_path, *, replace=False):
 
     engine = get_engine(db_path)
     Base.metadata.create_all(engine)
+    engine.dispose()
 
 
 def bind_session(db_path):

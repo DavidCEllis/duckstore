@@ -12,7 +12,7 @@ from duckstore.app import create_app
 
 @click.command()
 @click.option(
-    "--source",
+    "--archive",
     type=click.Path(resolve_path=True, path_type=Path, file_okay=True, exists=True),
     help=".7z Archive source for initialization if needed.",
 )
@@ -28,12 +28,12 @@ from duckstore.app import create_app
     "--shell", is_flag=True, help="Launch into a shell instead of the web server."
 )
 @click.option("--password", help="Password if the 7z archive is encrypted.")
-def launch(folder, create, source, shell, password):
+def launch(folder, create, archive, shell, password):
     if folder:
         db_path = folder / db_name
     else:
         # If there's a duckstore.db in the working directory use that, otherwise ask
-        folder = Path(".")
+        folder = Path.cwd()
         db_path = folder / db_name
 
         if not db_path.is_file():
@@ -53,8 +53,8 @@ def launch(folder, create, source, shell, password):
         click.echo(f"Database not found at {db_path}.")
         if create:
             click.echo(f"New Database will be created at {db_path}")
-        elif source:
-            click.echo(f"Extracting store from {source}")
+        elif archive:
+            click.echo(f"Extracting store from {archive}")
             if not password:
                 password = click.prompt(
                     "Password: ",
@@ -63,7 +63,7 @@ def launch(folder, create, source, shell, password):
                 )
                 if password == "":
                     password = None
-            extract_archive(source, folder, password)
+            extract_archive(archive, folder, password)
             click.echo(f"Extracted project to {folder}")
         else:
             choice = click.prompt(
@@ -76,11 +76,11 @@ def launch(folder, create, source, shell, password):
                 click.echo(f"New Database will be created at {db_path}")
             else:
                 # Chosen to load from source
-                source = get_archive_dialog()
-                if not source:
+                archive = get_archive_dialog()
+                if not archive:
                     click.echo("Source not selected, Exiting.")
                     sys.exit(1)
-                click.echo(f"Extracting store from {source}")
+                click.echo(f"Extracting store from {archive}")
                 password = click.prompt(
                     "Password: ",
                     hide_input=True,
@@ -88,7 +88,7 @@ def launch(folder, create, source, shell, password):
                 )
                 if password == "":
                     password = None
-                extract_archive(source, folder, password)
+                extract_archive(archive, folder, password)
                 click.echo(f"Extracted project to {folder}")
 
     if shell:

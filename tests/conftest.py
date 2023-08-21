@@ -4,11 +4,27 @@ from tempfile import TemporaryDirectory
 
 import pytest
 from duckstore.app import create_app
+from duckstore.database import create_db
+from duckstore.config import db_name
 
 src_folder = Path("./src").resolve()
 sys.path.insert(0, str(src_folder))
 
-test_folder = Path(__file__).resolve()
+test_folder = Path(__file__).parent.resolve()
+
+
+@pytest.fixture
+def db_folder():
+    store_base = test_folder / "stores"
+    store_base.mkdir(exist_ok=True)
+
+    tempdir = TemporaryDirectory(dir=store_base)
+    folder = tempdir.name
+    folder_path = Path(folder)
+    create_db(folder_path / db_name, replace=False)
+    yield folder
+
+    tempdir.cleanup()
 
 
 @pytest.fixture

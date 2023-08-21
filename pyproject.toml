@@ -1,13 +1,55 @@
 [build-system]
 requires = [
-    "setuptools>=42",
-    "wheel"
+    "setuptools>=61.0",
 ]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "duckstore"
+description = "Document store for Personal Documents"
+authors = [
+    { name = "David C Ellis" },
+]
+readme = "README.md"
+
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+]
+
+dependencies = [
+    "click",
+    "flask",
+    "flask-wtf",
+    "flask-pretty",
+    "bootstrap-flask",
+    "sqlalchemy",
+    "alembic",
+    "py7zr",
+    "wtforms",
+]
+
+dynamic = ['version']
+
+[project.optional-dependencies]
+testing = ["pytest", "pytest-cov"]
+dev = ["black", "sphinx"]
+
+[project.scripts]
+duckstore = "duckstore.scripts.launcher:launch"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.dynamic]
+version = {attr = "duckstore.__version__"}
+
 [tool.black]
 line-length = 96
-target_version = ['py37']
+target_version = ['py311']
 include = '\.pyi?$'
 exclude = '''
 
